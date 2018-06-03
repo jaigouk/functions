@@ -1,0 +1,7 @@
+type Query {
+  info: String!
+  user(firstName: String, lastName: String): User
+  allUsers: [User]
+  getFortuneCookie: String
+  postsByTitle(subString: String!, first: Int=3, offset: Int=0): [Post]
+}

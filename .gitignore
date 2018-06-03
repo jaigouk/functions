@@ -1,0 +1,14 @@
+faas_pass.txt
+registryAuth.txt
+basic_auth.txt
+template
+build
+.DS_Store
+go-gql
+.envrc
+note.md
+function_secrets.yml
+.vscode
+*/node_modules
+*.log
+.env

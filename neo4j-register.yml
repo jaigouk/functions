@@ -1,0 +1,9 @@
+provider:
+  name: faas
+  gateway: http://127.0.0.1:8080
+
+functions:
+  neo4j-register:
+    lang: node
+    handler: ./neo4j-register
+    image: neo4j-register
