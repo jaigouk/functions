@@ -6,7 +6,7 @@ var uuid = require('node-uuid');
 // const nock = require('nock')
 
 describe('getSession', function () {
-  it('returns ne4jSession', function () {
+  it('can run cypher on it', function () {
     context = {}
     session = dbUtils.getSession(context)
 
