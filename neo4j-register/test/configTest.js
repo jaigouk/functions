@@ -1,8 +1,8 @@
 var expect = require('chai').expect;
 var nconf = require('../config/config.js');
 
-describe('config', function () {
-  it('returns config for connecting to neo4j', function () {
+describe('config', () => {
+  it('returns config for connecting to neo4j', () => {
     expect(nconf.get('DB_USERNAME')).to.be.equal('neo4j');
     expect(nconf.get('DB_PASSWORD')).to.be.equal('faas');
     expect(nconf.get('DB_NAME')).to.be.equal('faas');

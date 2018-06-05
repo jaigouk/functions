@@ -1,36 +1,26 @@
 "use strict"
-var dbUtils = require('./neo4j/dbUtils');
-var uuid = require('node-uuid');
 
-function hashPassword(username, password) {
-    var s = username + ':' + password;
-    return crypto.createHash('sha256').update(s).digest('hex');
-}
+const dbUtils = require('./neo4j/dbUtils');
+const register = require('./createUser.js');
+const _ = require('lodash')
 
 module.exports = (req, callback) => {
-    session = dbUtils.getSession(req)
+  let username = _.get(req.body, 'username');
+  let password = _.get(req.body, 'password');
 
-    return session.run('MATCH (user:User {username: {username}}) RETURN user', {
-            username: username
-        })
-        .then(results => {
-            if (!_.isEmpty(results.records)) {
-                throw {
-                    username: 'username already in use',
-                    status: 400
-                }
-            } else {
-                return session.run('CREATE (user:User {id: {id}, username: {username}, password: {password}, api_key: {api_key}}) RETURN user', {
-                    id: uuid.v4(),
-                    username: username,
-                    password: hashPassword(username, password),
-                    api_key: randomstring.generate({
-                        length: 20,
-                        charset: 'hex'
-                    })
-                }).then(results => {
-                    return new User(results.records[0].get('user'));
-                })
-            }
-        });
+  if (!username) {
+    throw {
+      username: 'This field is required.',
+      status: 400
+    };
+  }
+  if (!password) {
+    throw {
+      password: 'This field is required.',
+      status: 400
+    };
+  }
+  register.createUser(dbUtils.getSession(req), username, password)
+    .then(response => callback(res))
+    .catch(callback)
 }

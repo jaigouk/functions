@@ -1,14 +1,16 @@
-var expect = require('chai').expect;
-var register = require('../createUser.js');
-var dbUtils = require('../neo4j/dbUtils');
+const expect = require('chai').expect;
+const register = require('../createUser.js');
+const dbUtils = require('../neo4j/dbUtils');
 
-describe('createUser', function () {
-  it('registers a user', function () {
+describe('createUser', () =>{
+  it('registers a user', () =>{
     context = {}
     session = dbUtils.getSession(context)
 
     session.run('MATCH(n: User { username: "neoFaas"}) DELETE n')
-    register.createUser(session, "neoFaas", "faas")
-    session.close()
+    register.createUser(session, "neoFaas", "faas").then(res => {
+      expect(res.properties.username).to.be.equal('neoFaas');
+      process.exit(1)
+    })
   })
 })
