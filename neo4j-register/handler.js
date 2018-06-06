@@ -21,6 +21,10 @@ module.exports = (req, callback) => {
     };
   }
   register.createUser(dbUtils.getSession(req), username, password)
-    .then(response => callback(res))
-    .catch(callback)
+    .then(res => {
+      callback(res)
+    })
+    .catch(err => {
+      callback
+    })
 }
