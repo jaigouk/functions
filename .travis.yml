@@ -1,0 +1,23 @@
+sudo: required
+
+language: node_js
+node_js:
+  - "8"
+
+addons:
+  apt:
+    packages:
+      - docker-ce
+
+services:
+  - neo4j
+
+cache: yarn
+script:
+  - sh contrib/ci.sh
+
+after_success:
+  - if [ "$TRAVIS_BRANCH" == "master" ]; then
+    docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD";
+    faas-cli push -f neo4j-register.yml
+    fi
