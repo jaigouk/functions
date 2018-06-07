@@ -1,6 +1,6 @@
 "use strict"
 
-const uuid = require('node-uuid');
+const uuid = require('uuid');
 const _ = require('lodash')
 const crypto = require('crypto');
 const randomstring = require("randomstring");

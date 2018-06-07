@@ -24,7 +24,5 @@ module.exports = (req, callback) => {
     .then(res => {
       callback(res)
     })
-    .catch(err => {
-      callback
-    })
+    .catch(err => callback(err))
 }

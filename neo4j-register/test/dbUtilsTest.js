@@ -1,6 +1,5 @@
-var expect = require('chai').expect;
-var dbUtils = require('../neo4j/dbUtils');
-var uuid = require('node-uuid');
+const expect = require('chai').expect;
+const dbUtils = require('../neo4j/dbUtils');
 
 describe('getSession', () => {
   it('can run cypher on it', () => {
