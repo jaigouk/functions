@@ -4,6 +4,7 @@ const uuid = require('uuid');
 const _ = require('lodash')
 const crypto = require('crypto');
 const randomstring = require("randomstring");
+const dbUtils = require('./neo4j/dbUtils');
 
 function hashPassword(username, password) {
   var s = username + ':' + password;
@@ -11,9 +12,9 @@ function hashPassword(username, password) {
 }
 
 var checkExistingUser = (session, username) => {
-   return session.run('MATCH (user:User {username: {username}}) RETURN user', {
-     username: username
-   })
+  return session.run('MATCH (user:User {username: {username}}) RETURN user', {
+    username: username
+  })
 }
 
 var insertUser = (session, username, password) => {
@@ -28,22 +29,18 @@ var insertUser = (session, username, password) => {
   })
 }
 
-exports.createUser = (session, username, password) => {
-  return checkExistingUser(session, username)
-  .then(results => {
-    if (!_.isEmpty(results.records)) {
-      throw {
-        username: 'username already in use',
-        status: 400
-      }
-    } else {
-      return insertUser(session, username, password)
-        .then(results => {
-          // return new User();
-          return results.records[0].get('user')
-        })
+exports.createUser = async (session, username, password) => {
+  let check = await checkExistingUser(session, username)
+
+  if (!_.isEmpty(check.records)) {
+    throw {
+      username: 'username already in use',
+      status: 400
     }
-  }).catch(err => {
-    console.log(err)
-  })
-};
+  } else {
+    let results = await insertUser(session, username, password)
+    return results.records[0].get('user')
+
+  }
+
+}

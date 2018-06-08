@@ -4,7 +4,7 @@ const dbUtils = require('./neo4j/dbUtils');
 const register = require('./createUser.js');
 const _ = require('lodash')
 
-module.exports = (req, callback) => {
+module.exports = async (req, callback) => {
   let username = _.get(req.body, 'username');
   let password = _.get(req.body, 'password');
 
@@ -20,9 +20,16 @@ module.exports = (req, callback) => {
       status: 400
     };
   }
-  register.createUser(dbUtils.getSession(req), username, password)
-    .then(res => {
-      callback(res)
-    })
-    .catch(err => callback(err))
+
+  let session = dbUtils.getSession(req)
+  let res = await register.createUser(session, username, password)
+  callback(res)
+    // .then(res => {
+    //   console.log(res)
+    //   callback(res)
+    // })
+    // .catch(err => {
+    //   console.log(err)
+    //    callback(err)
+    // })
 }
