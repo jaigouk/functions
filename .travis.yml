@@ -30,7 +30,7 @@ before_install:
 
 cache: yarn
 script:
-  - sh contrib/ci.sh
+  - make
 
 after_success:
   - if [ "$TRAVIS_BRANCH" == "master" ]; then

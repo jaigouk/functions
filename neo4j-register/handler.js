@@ -24,12 +24,4 @@ module.exports = async (req, callback) => {
   let session = dbUtils.getSession(req)
   let res = await register.createUser(session, username, password)
   callback(res)
-    // .then(res => {
-    //   console.log(res)
-    //   callback(res)
-    // })
-    // .catch(err => {
-    //   console.log(err)
-    //    callback(err)
-    // })
 }
