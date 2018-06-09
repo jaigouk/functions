@@ -3,9 +3,13 @@ provider:
   gateway: http://127.0.0.1:8080
 
 functions:
+  neo4j-register:
+    lang: node
+    handler: jaigouk/neo4j-register
+    image: neo4j-register
   neo4j-gql:
     lang: node
-    handler: ./neo4j-gql
+    handler: jaigouk/neo4j-gql
     image: neo4j-gql
     environment_file:
       - function_secrets.yml

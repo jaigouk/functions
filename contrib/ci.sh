@@ -3,7 +3,8 @@
 # Run this command from one-level higher in the folder path, not this folder.
 # stolen from https://github.com/openfaas/openfaas-cloud/blob/master/contrib/ci.sh
 
-(cd neo4j-register && yarn & yarn test)
+(cd ../neo4j-register && yarn && yarn test) && \
+(cd ../neo4j-gql && yarn && yarn test)
 
 CLI="faas-cli"
 
@@ -19,3 +20,5 @@ if ! [ -x "$(command -v faas-cli)" ]; then
 fi
 
 echo "Working folder: `pwd`"
+
+$CLI build -f ../stack.yml --parallel=4
