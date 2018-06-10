@@ -35,5 +35,5 @@ script:
 after_success:
   - if [ "$TRAVIS_BRANCH" == "master" ]; then
     docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD";
-    faas-cli push -f neo4j-register.yml
+    faas-cli push -f stack.yml
     fi

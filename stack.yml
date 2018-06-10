@@ -5,11 +5,11 @@ provider:
 functions:
   neo4j-register:
     lang: node
-    handler: jaigouk/neo4j-register
-    image: neo4j-register
+    handler: neo4j-register
+    image: jaigouk/neo4j-register
   neo4j-gql:
     lang: node
-    handler: jaigouk/neo4j-gql
-    image: neo4j-gql
+    handler: neo4j-gql
+    image: jaigouk/neo4j-gql
     environment_file:
       - function_secrets.yml
