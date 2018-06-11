@@ -1,7 +1,7 @@
 "use strict"
 
 const dbUtils = require('./neo4j/dbUtils');
-const register = require('./createUser.js');
+const users = require('./createUser.js');
 const _ = require('lodash')
 
 module.exports = async (req, callback) => {
@@ -22,6 +22,6 @@ module.exports = async (req, callback) => {
   }
 
   let session = dbUtils.getSession(req)
-  let res = await register.createUser(session, username, password)
+  let res = await users.createUser(session, username, password)
   callback(res)
 }

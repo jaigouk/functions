@@ -11,13 +11,13 @@ function hashPassword(username, password) {
   return crypto.createHash('sha256').update(s).digest('hex');
 }
 
-var checkExistingUser = (session, username) => {
+const checkExistingUser = (session, username) => {
   return session.run('MATCH (user:User {username: {username}}) RETURN user', {
     username: username
   })
 }
 
-var insertUser = (session, username, password) => {
+const insertUser = (session, username, password) => {
   return session.run('CREATE (user:User {id: {id}, username: {username}, password: {password}, api_key: {api_key}}) RETURN user', {
     id: uuid.v4(),
     username: username,
