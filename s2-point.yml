@@ -1,0 +1,9 @@
+provider:
+  name: faas
+  gateway: http://127.0.0.1:8080
+
+functions:
+  s2-point:
+    lang: python
+    handler: ./s2-point
+    image: s2-point

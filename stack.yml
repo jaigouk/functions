@@ -21,3 +21,7 @@ functions:
     image: neo4j-login
     environment_file:
       - function_secrets.yml
+  s2-point:
+    lang: python
+    handler: ./s2-point
+    image: s2-point
