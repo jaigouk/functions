@@ -7,9 +7,17 @@ functions:
     lang: node
     handler: neo4j-register
     image: jaigouk/neo4j-register
+    environment_file:
+      - function_secrets.yml
   neo4j-gql:
     lang: node
     handler: neo4j-gql
     image: jaigouk/neo4j-gql
+    environment_file:
+      - function_secrets.yml
+  neo4j-login:
+    lang: node
+    handler: jaigouk/neo4j-login
+    image: neo4j-login
     environment_file:
       - function_secrets.yml
