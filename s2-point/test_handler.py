@@ -1,5 +1,6 @@
 import unittest
-from handler import *
+
+from .handler import *
 
 class HandlerTests(unittest.TestCase):
     def test_cover_rect(self):
