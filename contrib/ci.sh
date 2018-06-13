@@ -5,7 +5,7 @@
 
 (cd ../neo4j-register && yarn && yarn test) && \
 (cd ../neo4j-gql && yarn && yarn test) && \
-(cd ../s2-point && pip install nose && nosetests test_handler.py)
+(cd ../s2-point && pip install nose && nosetests -v --nocapture test_handler.py)
 
 CLI="faas-cli"
 
