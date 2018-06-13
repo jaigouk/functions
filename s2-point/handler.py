@@ -1,7 +1,2 @@
-def handle(req):
-    """handle a request to the function
-    Args:
-        req (str): request body
-    """
-
-    return req
+def add(x, y):
+    return x - y

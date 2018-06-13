@@ -2,7 +2,8 @@ FROM ubuntu:16.04
 
 # Pick up some TF dependencies
 RUN apt-get update -y \
-  && apt-get install -y --no-install-recommends  software-properties-common python-software-properties \
+  && apt-get install -y --no-install-recommends \
+  software-properties-common python-software-properties \
   && add-apt-repository ppa:jonathonf/python-3.6 \
   && apt-get update -y && apt-get install -y --no-install-recommends \
   build-essential \
@@ -22,21 +23,24 @@ RUN apt-get update -y \
 
 # Pick up some s2 dependencies
 RUN apt-get -y install --no-install-recommends  \
-  git libgflags-dev libgoogle-glog-dev libgtest-dev openssl swig \
+  libgflags-dev libgoogle-glog-dev libgtest-dev openssl swig \
   libssl-dev cmake gawk libevent-dev libcurl4-openssl-dev libboost-dev \
   && apt-get clean
-  # && rm -rf /var/lib/apt/lists/*
 
 RUN mkdir -p /sources \
   && touch /sources/alias \
   && echo "alias python=/usr/bin/python3.6" >> /sources/alias
 
 COPY googletest /sources/googletest
-RUN /bin/bash -c "mkdir -p /sources/googletest/build && cd /sources/googletest/build && cmake .. && make && make install"
+RUN mkdir -p /sources/googletest/build \
+  && cd /sources/googletest/build \
+  && cmake .. \
+  && make && make install
 
 COPY s2geometry /sources/s2geometry
 RUN mkdir -p /sources/s2geometry/build
-RUN /bin/bash -c "cd /sources/s2geometry/build && source /sources/venv/bin/activate && PYTHON_INCLUDE_DIRS=/usr/include/python3.6 cmake -DGTEST_ROOT=/sources/googletest /sources/s2geometry && make && make test && make install"
+RUN /bin/bash -c "cd /sources/s2geometry/build && source /sources/venv/bin/activate && PYTHON_INCLUDE_DIRS=/usr/include/python3.6 cmake -DGTEST_ROOT=/sources/googletest .. \
+  && make && make test && make install"
 
 WORKDIR /sources
 ENTRYPOINT ["/bin/bash"]
