@@ -1,5 +1,6 @@
 import pywraps2 as s2
 import os
+import json
 from os.path import join, dirname
 from dotenv import load_dotenv
 
@@ -22,6 +23,7 @@ def cover_rect(lat1, long1, lat2, long2):
     coverer.set_max_level(MAX_LEVEL)
     coverer.set_max_cells(60)
     covering = coverer.GetCovering(region_rect)
-    # print([c.ToToken() for c in covering])
-
-    return covering
+    res = [c.ToToken() for c in covering]
+    # print()
+    return json.dumps({"total": len(res), "cellIDs": res})
+    # return covering

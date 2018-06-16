@@ -21,7 +21,7 @@ functions:
     image: jaigouk/neo4j-login
     environment_file:
       - function_secrets.yml
-  s2-point:
+  s2-cover-rect:
     lang: dockerfile
-    handler: ../s2-point
-    image: jaigouk/s2-point
+    handler: ../s2-cover-rect
+    image: jaigouk/s2-cover-rect

@@ -25,12 +25,8 @@ COPY requirements.txt	.
 COPY handler.py	.
 RUN /sources/venv/bin/pip3 install --user app  -r requirements.txt
 
-# RUN  /bin/bash -c "source /sources/venv/bin/activate && do-something-with-python"
-# Populate example here - i.e. "cat", "sha512sum" or "node index.js"
-ENV fprocess="cat"
 # Set to true to see request in function logs
-ENV write_debug="/sources/venv/bin/python3 /home/app/function/handler.py"
+ENV fprocess="/sources/venv/bin/python3 /home/app/function/handler.py"
 
 HEALTHCHECK --interval=5s CMD [ -e /tmp/.lock ] || exit 1
 CMD [ "fwatchdog" ]
-# ENTRYPOINT ["/bin/bash"]
