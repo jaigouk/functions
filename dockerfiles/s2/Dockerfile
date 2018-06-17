@@ -39,8 +39,9 @@ RUN mkdir -p /sources/googletest/build \
 
 COPY s2geometry /sources/s2geometry
 RUN mkdir -p /sources/s2geometry/build
-RUN /bin/bash -c "cd /sources/s2geometry/build && source /sources/venv/bin/activate && PYTHON_INCLUDE_DIRS=/usr/include/python3.6 cmake -DGTEST_ROOT=/sources/googletest .. \
+RUN /bin/bash -c "cd /sources/s2geometry/build && source /sources/venv/bin/activate && cmake -DCMAKE_INSTALL_PREFIX=/usr -DGTEST_ROOT=/sources/googletest .. \
   && make && make test && make install"
+RUN cp /usr/lib/python3.6/site-packages/_pywraps2.so /sources/venv/lib/python3.6/site-packages \
+  && cp /usr/lib/python3.6/site-packages/pywraps2.py /sources/venv/lib/python3.6/site-packages
 
-WORKDIR /sources
 ENTRYPOINT ["/bin/bash"]
