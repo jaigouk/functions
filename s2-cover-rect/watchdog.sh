@@ -1,3 +1,3 @@
-#!/bin/sh
+#!/bin/bash
 
-source /sources/venv/bin/activate && /home/app/.local/bin/fwatchdog
+/bin/bash -c "source /sources/venv/bin/activate && /home/app/.local/bin/fwatchdog"

@@ -24,24 +24,38 @@ using jaigouk/s2 image and python swig, it returns cellIDs
 
 ## SETUP (local os x)
 
-```console
+```sh
+# install faas
 git clone https://github.com/openfaas/faas
 cd faas && git checkout master && ./deploy_stack.sh
 docker service ls
+# install faas-cli
 curl -sL cli.openfaas.com | sudo sh
-
+# install grafana
 docker service create -d \
---name=func_grafana \
---publish=3030:3030 \
+--name=grafana \
+--publish=3000:3000 \
 --network=func_functions \
 stefanprodan/faas-grafana:4.6.3
 
 cd .. && cd functions
 make
-make docker-push
+make push
 faas-cli deploy -f ./stack.yml
 ```
 
 ## dev
 
 for node.js functions, you need to check this [article](https://www.smashingmagazine.com/2018/06/nodejs-tools-techniques-performance-servers/?utm_source=DailyDrip+Homepage+Newsletter&utm_campaign=7c83611c11-EMAIL_CAMPAIGN_2018_03_22_COPY_02&utm_medium=email&utm_term=0_1e4a41c1c6-7c83611c11-161638545)
+
+deleting all services including openfaas
+
+```console
+docker service rm $(docker service ls -q)
+docker service ls
+docker system prune -a
+```
+
+## todo
+- [] use [grumpy](https://github.com/google/grumpy)
+- [] use [polly.js](https://netflix.github.io/pollyjs/#/) for node.js functions

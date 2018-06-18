@@ -15,4 +15,4 @@ fi
 
 echo "Working folder: `pwd`"
 
-$CLI push -f ./stack.yml --parallel=4
+$CLI push -f ../stack.yml --parallel=4

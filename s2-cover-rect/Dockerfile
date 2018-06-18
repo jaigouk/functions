@@ -16,6 +16,18 @@ RUN cp /sources/alias /home/app/.profile
 WORKDIR /home/app/
 COPY requirements.txt	.
 
+ENV PATH=$PATH:/home/app/.local/bin
+RUN curl -sSL https://github.com/openfaas/faas/releases/download/0.8.2/fwatchdog > /home/app/.local/bin/fwatchdog \
+  && chmod +x /home/app/.local/bin/fwatchdog
+RUN mkdir -p function
+RUN touch ./function/__init__.py
+
+WORKDIR /home/app/function
+COPY .env	.
+COPY handler.py	.
+COPY requirements.txt	.
+COPY watchdog.sh .
+RUN chmod +x watchdog.sh
 RUN chown app:app -R /home/app \
   /sources/venv/lib/python3.6/ \
   /sources/venv/bin/ \
@@ -23,33 +35,17 @@ RUN chown app:app -R /home/app \
   /tmp/ \
   /sources/venv/
 
-
-USER app
-ENV PATH=$PATH:/home/app/.local/bin
-RUN /bin/bash -c "source /sources/venv/bin/activate && pip3 install -r requirements.txt"
-RUN curl -sSL https://github.com/openfaas/faas/releases/download/0.8.2/fwatchdog > /home/app/.local/bin/fwatchdog \
-  && chmod +x /home/app/.local/bin/fwatchdog
-RUN mkdir -p function
-RUN touch ./function/__init__.py
-
-RUN chown app:app -R /home/app \
-  /home/app/.local/bin/ \
-  /tmp
-
 USER app
 
-WORKDIR /home/app/function
-COPY .env	.
-COPY handler.py	.
-COPY requirements.txt	.
-COPY watchdog.sh .
-WORKDIR /home/app/
+ENV PATH "$PATH:/sources/venv/bin"
+RUN ["/bin/bash", "-c", "source /sources/venv/bin/activate && pip3.6 install -r requirements.txt"]
 
+
+ENV fprocess="/sources/venv/bin/python3.6 /home/app/function/handler.py"
 # Set to true to see request in function logs
-
-ENV fprocess="python3 /home/app/function/handler.py"
 ENV write_debug="true"
 
 HEALTHCHECK --interval=5s CMD [ -e /tmp/.lock ] || exit 1
 
-CMD ["/home/app/function/watchdog.sh"]
+CMD ["fwatchdog"]
+ENTRYPOINT ["/bin/bash", "-l", "-c"]
