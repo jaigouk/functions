@@ -3,6 +3,13 @@ import requests, json, os, sys
 from os.path import join, dirname
 from dotenv import load_dotenv
 from io import StringIO
+import logging
+log = logging.getLogger(__name__)
+out_hdlr = logging.StreamHandler(sys.stdout)
+out_hdlr.setFormatter(logging.Formatter('%(asctime)s %(message)s'))
+out_hdlr.setLevel(logging.INFO)
+log.addHandler(out_hdlr)
+log.setLevel(logging.INFO)
 
 dotenv_path = join(dirname(__file__), '.env')
 load_dotenv(dotenv_path)
@@ -12,25 +19,31 @@ MAX_LEVEL = int(os.getenv("MAX_LEVEL"))
 MAX_CELLS = int(os.getenv("MAX_CELLS"))
 
 def handle(req):
+    log.info('Started s2-cover-rect with ' + req)
     try:
         payload = json.loads(req.rstrip())
     except:
+        log.error("bad json request" + req)
         return sys.exit("bad json request\n")
 
     try:
         payload["coordinates"]
     except:
+        log.error("coordinates can't be blank" + req)
         return sys.exit("coordinates can't be blank\n")
 
     if payload["coordinates"] == "":
+        log.error("coordinates can't be blank" + req)
         return sys.exit("coordinates can't be blank\n")
 
     coords = payload["coordinates"].split(",")
     if len(coords) != 4:
+        log.error("need 4 numbers" + req)
         return sys.exit("need 4 numbers\n")
 
     lat1, long1, lat2, long2 = coords
     res = cover_rect(float(lat1), float(long1), float(lat2), float(long2))
+    log.info("successful")
     return res
 
 
