@@ -1,6 +1,5 @@
 import unittest
 import json
-from io import StringIO
 from handler import cover_rect
 from handler import handle
 
@@ -8,17 +7,14 @@ from handler import handle
 class HandlerTests(unittest.TestCase):
     def test_cover_rect(self):
         expected = 109193
-        io = StringIO(cover_rect(3, 4, 34, 32))
-        got = json.load(io)
+        got = cover_rect(3, 4, 34, 32)
         self.assertEqual(got["total"], expected)
 
     def test_handle(self):
         expected = 109193
         req = '{"coordinates": "3, 4, 34, 32"}'
-        res = handle(req)
-        io = StringIO(res)
-        got = json.load(io)
-        self.assertEqual(got["total"], expected)
+        res = json.loads(handle(req))
+        self.assertEqual(res["total"], expected)
 
     def test_handle_failure_for_short_coords(self):
         req = '{"coordinates": "4, 34, 32"}'

@@ -48,6 +48,13 @@ faas-cli deploy -f ./stack.yml
 
 for node.js functions, you need to check this [article](https://www.smashingmagazine.com/2018/06/nodejs-tools-techniques-performance-servers/?utm_source=DailyDrip+Homepage+Newsletter&utm_campaign=7c83611c11-EMAIL_CAMPAIGN_2018_03_22_COPY_02&utm_medium=email&utm_term=0_1e4a41c1c6-7c83611c11-161638545)
 
+
+for testing s2-cover-rect,
+
+```console
+nosetests s2-cover-rect/function/test_handler.py -v--nocapture
+```
+
 deleting all services including openfaas
 
 ```console
@@ -57,5 +64,4 @@ docker system prune -a
 ```
 
 ## todo
-- [] use [grumpy](https://github.com/google/grumpy)
 - [] use [polly.js](https://netflix.github.io/pollyjs/#/) for node.js functions

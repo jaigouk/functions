@@ -1,41 +1,49 @@
-FROM jaigouk/s2
+FROM jaigouk/s2-tf-py3
 
-RUN mkdir -p /home/app/.local/bin && mkdir -p /home/app/function
+RUN echo "Pulling watchdog binary from Github." \
+  && curl -sSL https://github.com/openfaas/faas/releases/download/0.8.2/fwatchdog > /usr/bin/fwatchdog \
+  && chmod +x /usr/bin/fwatchdog
 
-# Add non root user
-RUN addgroup app &&useradd -r -u 1001 -g app app
-RUN cp /sources/alias /home/app/.profile
-WORKDIR /home/app/
+WORKDIR /root/
 
-ENV PATH=$PATH:/home/app/.local/bin
-RUN curl -sSL https://github.com/openfaas/faas/releases/download/0.8.2/fwatchdog > /home/app/.local/bin/fwatchdog \
-  && chmod +x /home/app/.local/bin/fwatchdog
+COPY index.py .
+COPY requirements.txt .
+ENV PATH "$PATH:/usr/bin:/sources/venv/bin"
+RUN pip install -r requirements.txt
+
+
+COPY function function
 RUN touch ./function/__init__.py
+WORKDIR /root/function/
+COPY function/requirements.txt	.
+RUN pip install -r requirements.txt
 
-WORKDIR /home/app/function
-COPY .env.example	.env
-COPY handler.py	.
-COPY requirements.txt	.
-COPY watchdog.sh .
-RUN chmod +x watchdog.sh
-RUN chown app:app -R /home/app \
-  /sources/venv/lib/python3.6/ \
-  /sources/venv/bin/ \
-  /usr/bin/ \
-  /tmp/ \
-  /sources/venv/
+WORKDIR /root/
+ENV fprocess="python index.py"
 
-USER app
+# WORKDIR /home/app/function
+# COPY .env.example	.env
+# COPY handler.py	.
+# COPY requirements.txt	.
+# COPY watchdog.sh .
+# RUN chmod +x watchdog.sh
+# RUN chown app:app -R /home/app \
+#   /sources/venv/lib/python3.6/ \
+#   /sources/venv/bin/ \
+#   /usr/bin/ \
+#   /tmp/ \
+#   /sources/venv/
 
-ENV PATH "$PATH:/sources/venv/bin"
-RUN ["/bin/bash", "-c", "source /sources/venv/bin/activate && pip3.6 install -r requirements.txt"]
+# USER app
 
 
-ENV fprocess="/sources/venv/bin/python3.6 /home/app/function/handler.py"
 # Set to true to see request in function logs
 ENV write_debug="true"
+ENV read_timeout=10
+ENV write_timeout=10
+ENV exec_timeout=30
 
 HEALTHCHECK --interval=5s CMD [ -e /tmp/.lock ] || exit 1
 
 CMD ["fwatchdog"]
-ENTRYPOINT ["/bin/bash", "-l", "-c"]
+# ENTRYPOINT ["/bin/bash", "-c"]

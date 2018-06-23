@@ -5,9 +5,9 @@ installed s2 with python3.6
 ## push
 
 ```console
-docker build -t s2 .
-docker tag s2 jaigouk/s2
-docker push jaigouk/s2
+docker build -t s2-tf-py3 .
+docker tag s2-tf-py3 jaigouk/s2-tf-py3
+docker push jaigouk/s2-tf-py3
 ```
 
 ## installing s2 on os x
