@@ -1,3 +1,8 @@
+
+*.ipynb
+__pycache__
+*.py[cod]
+*$py.class
 faas_pass.txt
 registryAuth.txt
 basic_auth.txt
