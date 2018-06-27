@@ -17,3 +17,6 @@ function_secrets.yml
 */node_modules
 *.log
 .env
+contrib/kong.md
+contrib/ghost.yaml
+contrib/pass*
